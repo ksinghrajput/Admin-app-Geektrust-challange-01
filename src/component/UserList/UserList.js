@@ -4,6 +4,17 @@ import { Checkbox } from '@mui/material';
 
 const UserList = (props) => {
     const { adminList } = props;
+    var filteredList = [];
+
+    if(props.enteredValue) {
+        filteredList = adminList.filter(item => 
+            item.name.includes(props.enteredValue) || 
+            item.email.includes(props.enteredValue) || 
+            item.role.includes(props.enteredValue))
+        } else {
+            filteredList = adminList;
+        }
+    
 
     return (
         <div className='table'>
@@ -21,7 +32,7 @@ const UserList = (props) => {
                 <div className="cell cell-text">Action</div>
             </div>
 
-            {adminList && adminList.map(user => {
+            {filteredList.map(user => {
                 return (
                     <div className='table-content row' key={user.id}>
                         <div className="cell">

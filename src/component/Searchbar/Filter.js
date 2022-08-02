@@ -1,9 +1,9 @@
 import React from 'react';
 import './Filter.css'
 
-const Filter = () => {
+const Filter = (props) => {
     const handleSearchEvent = (event) => {
-        console.log(event);
+        props.onFilterChange(event.target.value);
     }
 
     return (

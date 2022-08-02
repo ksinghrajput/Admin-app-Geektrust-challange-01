@@ -8,6 +8,7 @@ import PaginationOutlined from './component/Pagenation/PagenationOutline';
 function App() {
 
   const [adminList, setAdminList] = useState([]);
+  const [enteredValue, setEnteredValue] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -21,10 +22,14 @@ function App() {
     return () => mounted = false;
   }, [])
 
+  const inputFieldHandler = (enteredValue) => {
+    setEnteredValue(enteredValue);
+  }
+
   return (
     <div className="App">
-      <Filter />
-      <UserList adminList={adminList}/>
+      <Filter onFilterChange={inputFieldHandler}/>
+      <UserList adminList={adminList} enteredValue={enteredValue} />
       <PaginationOutlined />
     </div>
   );
