@@ -1,0 +1,28 @@
+.table {
+    font-size: medium;
+}
+
+.table-header {
+    font-weight: 700;
+    display: flex;
+    justify-content: space-around;
+    padding: .4rem 0;
+    border-bottom: 1px solid lightgray;
+    padding-left: 1rem;
+}
+
+.table-content {
+    display: flex;
+    justify-content: space-around;
+    padding: .4rem 0;
+    border-bottom: 1px solid lightgray;
+    padding-left: 1rem;
+}
+
+.cell {
+    width: 20%;
+}
+
+.cell-text {
+    padding: 9px;
+}

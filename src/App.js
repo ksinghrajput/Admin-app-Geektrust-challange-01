@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import { getAllUsers } from './service/adminApi';
+import { useState, useEffect } from 'react'
+import Filter from './component/Searchbar/Filter';
+import UserList from './component/UserList/UserList';
+import PaginationOutlined from './component/Pagenation/PagenationOutline';
 
 function App() {
+
+  const [adminList, setAdminList] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+    getAllUsers()
+      .then(items => {
+        if (mounted) {
+          setAdminList(items)
+          console.log(items)
+        }
+      })
+    return () => mounted = false;
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Filter />
+      <UserList adminList={adminList}/>
+      <PaginationOutlined />
     </div>
   );
 }
