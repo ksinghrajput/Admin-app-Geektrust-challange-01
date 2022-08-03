@@ -3,7 +3,6 @@ import { getAllUsers } from './service/adminApi';
 import { useState, useEffect } from 'react'
 import Filter from './component/Searchbar/Filter';
 import UserList from './component/UserList/UserList';
-import PaginationOutlined from './component/Pagenation/PagenationOutline';
 
 function App() {
 
@@ -30,7 +29,6 @@ function App() {
     <div className="App">
       <Filter onFilterChange={inputFieldHandler}/>
       <UserList adminList={adminList} enteredValue={enteredValue} />
-      <PaginationOutlined />
     </div>
   );
 }
