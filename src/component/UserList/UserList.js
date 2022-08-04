@@ -12,8 +12,11 @@ import UserForm from './UserForm';
 const UserList = (props) => {
     const { adminList, enteredValue } = props;
     const [page, setPage] = useState(1);
+    const [selected, setSelected] = useState(false);
     const [userList, setUserList] = useState(adminList);
     const PER_PAGE = 10;
+    const count = Math.ceil(userList.length / PER_PAGE);
+    const _adminList = usePagination(userList, 10);
 
     useMemo(() => {
         let filteredList = [];
@@ -26,19 +29,10 @@ const UserList = (props) => {
     }, [enteredValue])
 
 
-    const count = Math.ceil(userList.length / PER_PAGE);
-    const _adminList = usePagination(userList, 10);
-
     const handleChange = (e, p) => {
         setPage(p);
         _adminList.jump(p);
-    };
-
-    const deleteUserHandler = (deletedAdmin) => {
-        let adminAfterDeletion = userList.filter((admin) => {
-            return admin.id !== deletedAdmin;
-        });
-        setUserList(adminAfterDeletion);
+        setSelected(false)
     };
 
     const showEditForm = (userId) => {
@@ -48,6 +42,18 @@ const UserList = (props) => {
     const submitForm = (userId) => {
         changeState(userId, false);
     }
+
+    const deleteSelectedUser = () => {
+        setUserList(userList.filter(user => user.selected === false))
+        setSelected(false)
+    }
+
+    const deleteUserHandler = (deletedAdmin) => {
+        let adminAfterDeletion = userList.filter((admin) => {
+            return admin.id !== deletedAdmin;
+        });
+        setUserList(adminAfterDeletion);
+    };
 
     const changeState = (userId, stateValue) => {
         setUserList(userList.map(item => {
@@ -59,16 +65,10 @@ const UserList = (props) => {
             } else {
                 return item
             }
-
         }))
     }
 
     const usermodificationHandler = (userData) => {
-        console.log(userData);
-        UpdateUserDetail(userData);
-    }
-
-    const UpdateUserDetail = (userData) => {
         setUserList(userList.map(item => {
             if (item.id === userData.id) {
                 return {
@@ -78,15 +78,49 @@ const UserList = (props) => {
             } else {
                 return item
             }
-
         }))
     }
+
+    const updateSelectedStatus = (userId) => {
+        setUserList(userList.map(item => {
+            if (item.id === userId) {
+                return {
+                    ...item,
+                    selected: !item.selected
+                }
+            } else {
+                return item
+            }
+        }))
+    }
+
+    const selectAllUser = () => {
+        setSelected(!selected)
+        let currentData = _adminList.currentData();
+        setUserList(
+            userList.map(user => {
+                let found = currentData.filter(item => item.id ===  user.id)
+                debugger
+                if(found && found.length){
+                    return {
+                        ...user,
+                        selected: !user.selected
+                    }
+                } else {
+                    return user;
+                }
+            })
+        )
+    }
+
 
     return (
         <div className='table'>
             <div className='table-header row'>
                 <div className="cell">
-                    <Checkbox
+                    <Checkbox 
+                        checked={selected}
+                        onChange={selectAllUser}
                         inputProps={{ 'aria-label': 'controlled' }}
                     />
                 </div>
@@ -100,7 +134,9 @@ const UserList = (props) => {
                 return (
                     <div className='table-content row' key={user.id}>
                         <div className="cell">
-                            <Checkbox
+                            <Checkbox 
+                                onChange={() => updateSelectedStatus(user.id)}
+                                checked={user.selected}
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         </div>
@@ -129,6 +165,8 @@ const UserList = (props) => {
                         color="primary" showFirstButton showLastButton />
                 </Stack>
             </div>
+
+            <button className='delete-btn' type='button' onClick={deleteSelectedUser}>Delete all</button>
         </div>
     );
 }

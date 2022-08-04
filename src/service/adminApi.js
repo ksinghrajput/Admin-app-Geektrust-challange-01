@@ -5,7 +5,7 @@ export function getAllUsers() {
             .then(data => data.json())
             .then(user => {
             return user.map(item => {
-                return {...item,'state': false }})
+                return {...item,'state': false, selected: false }})
         })
     } catch (error) {
         return [];

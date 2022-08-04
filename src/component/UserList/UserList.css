@@ -19,6 +19,16 @@
     padding-left: 1rem;
 }
 
+.delete-btn {
+    color: #fff;
+    background-color: rgb(243, 23, 23);
+    font-size: 20px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    cursor: pointer;
+}
+
 .cell {
     width: 20%;
 }
@@ -26,3 +36,8 @@
 .cell-text {
     padding: 9px;
 }
+
+.heightler {
+    color: gray;
+    font-weight: 500;
+  }
