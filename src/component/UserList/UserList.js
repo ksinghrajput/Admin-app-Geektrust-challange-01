@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react';
+import UserDetails from './UserDetails';
 import './UserList.css'
 import '../Pagenation/Pagenation.css'
 import { Checkbox } from '@mui/material';
 import usePagination from "../Pagenation/pagination";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { MdEditCalendar, MdDeleteOutline } from "react-icons/md";
+import { MdEditCalendar, MdDeleteOutline, MdDone } from "react-icons/md";
+import UserForm from './UserForm';
 
 const UserList = (props) => {
     const { adminList, enteredValue } = props;
@@ -39,6 +41,46 @@ const UserList = (props) => {
         setUserList(adminAfterDeletion);
     };
 
+    const showEditForm = (userId) => {
+        changeState(userId, true);
+    }
+
+    const submitForm = (userId) => {
+        changeState(userId, false);
+    }
+
+    const changeState = (userId, stateValue) => {
+        setUserList(userList.map(item => {
+            if (item.id === userId) {
+                return {
+                    ...item,
+                    state: stateValue
+                }
+            } else {
+                return item
+            }
+
+        }))
+    }
+
+    const usermodificationHandler = (userData) => {
+        console.log(userData);
+        UpdateUserDetail(userData);
+    }
+
+    const UpdateUserDetail = (userData) => {
+        setUserList(userList.map(item => {
+            if (item.id === userData.id) {
+                return {
+                    ...item,
+                    ...userData
+                }
+            } else {
+                return item
+            }
+
+        }))
+    }
 
     return (
         <div className='table'>
@@ -62,17 +104,14 @@ const UserList = (props) => {
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         </div>
-                        <div className="cell cell-text">{user.name}</div>
-                        <div className="cell cell-text">{user.email}</div>
-                        <div className="cell cell-text">{user.role}</div>
-                        <div className="cell cell-text">
-                            <span >
-                                <MdEditCalendar style={{ 'margin-right': '30px' }} />
-                            </span>
-                            <span onClick={() => deleteUserHandler(user.id)}>
-                                <MdDeleteOutline />
-                            </span>
 
+                        {!user.state && <UserDetails userValue={user} />}
+                        {user.state && <UserForm userValue={user} onUserInput={usermodificationHandler}/>}
+
+                        <div className="cell cell-text">
+                            {!user.state && (<span onClick={() => showEditForm(user.id)}><MdEditCalendar /></span>)}
+                            {user.state && (<span onClick={() => submitForm(user.id)}><MdDone /></span>)}
+                            <span style={{ marginLeft: '30px'}} onClick={() => deleteUserHandler(user.id)}><MdDeleteOutline /></span>
                         </div>
                     </div>
                 )
@@ -90,8 +129,6 @@ const UserList = (props) => {
                         color="primary" showFirstButton showLastButton />
                 </Stack>
             </div>
-
-
         </div>
     );
 }
