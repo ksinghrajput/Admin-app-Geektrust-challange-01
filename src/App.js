@@ -6,8 +6,8 @@ import UserList from './component/UserList/UserList';
 
 function App() {
 
-  const [adminList, setAdminList] = useState([]);
-  const [enteredValue, setEnteredValue] = useState('');
+  const [adminList, setAdminList] = useState();
+  const [enteredValue, setEnteredValue] = useState();
 
   useEffect(() => {
     let mounted = true;
@@ -27,8 +27,8 @@ function App() {
 
   return (
     <div className="App">
-      <Filter onFilterChange={inputFieldHandler}/>
-      <UserList adminList={adminList} enteredValue={enteredValue} />
+      <Filter onFilterChange={inputFieldHandler} />
+      {adminList && <UserList adminList={adminList} enteredValue={enteredValue} />}
     </div>
   );
 }
